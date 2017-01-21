@@ -1,38 +1,63 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>rio - LeafLet Preview</title>
+  <title>The Marvelous City</title>
   <meta charset="utf-8" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.2/leaflet.css" />
   <link href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/themes/smoothness/jquery-ui.min.css" rel="stylesheet" type="text/css"/>
+  
   <style type="text/css">
-    #basemapslidercontainer {
-      position: absolute;
-      top: 50px;
-      right: 10px;
-      z-index: 1000;
-    }
 
-    #basemapslider{
-      font-size:62.5%;
-      margin: 14px;
-      height: 125px;
-      width:7px;
-    }
-
-    #map{
-       width: 800px;
-       height: 600px
-    }
+   
   </style>
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+  
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+
+  
   <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/jquery-ui.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.2/leaflet.js"></script>
+  
+  
+  <link rel="stylesheet" href="rio.css" type="text/css" />
+
+</head>
+<body>
+<div id='rio-layout'></div>
+<div id='rio-panels'></div>
+    <div id="basemapslidercontainer">
+      <div id="basemapslider">
+
+ 
   <script>
+  $( "#rio-layout" ).load( "rio-layout.html", function() {
+$( "#rio-panels" ).load( "rio-panels.html", function() {
+  
     $(document).ready(function () {
+    
+    
+                //for the side toggle panel     
+            var sideSlideToggle = true;
+
+       //accordion layout
+
+            var acc = document.getElementsByClassName("accordion");
+            var i;
+
+            for (i = 0; i < acc.length; i++) {
+                acc[i].onclick = function() {
+                    this.classList.toggle("active");
+                    this.nextElementSibling.classList.toggle("show");
+                }
+            }
+    
+    
+                //this hides the tooltip so it is not hovering around
+            $('.city-name').hide();
+
+    
       $("#basemapslider").slider({
             animate: true,
             value: 1,
@@ -45,19 +70,25 @@
             }
        });
 
-        $('#basemapslider').mousedown(function(){
-          map.dragging.disable();
-        })
 
-        $('#basemapslider').mouseup(function(){
-          map.dragging.enable();
-        })
 
-      var map = L.map('map').setView([-22.9256224748, -43.1858070463], 10);
+      var map = L.map('map', {
+                    maxZoom: 20,
+                    zoomControl: false
+                }),
+                $cityName = $('.city-name');
+
+      
+      
+      map.setView([-22.9263, -43.20176], 13);
       var baselayer = L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         maxZoom: 18,
         attribution: 'Map data &copy; <a href="http://openstreetmap.org/copyright">OpenStreetMap</a> contributors'
       }).addTo(map);
+      
+            L.control.zoom({
+                position: 'topright'
+            }).addTo(map);
 
       var mytile =L.tileLayer('../rio/rio/{z}/{x}/{y}.png', {
         maxZoom: 20,
@@ -66,15 +97,77 @@
       }).addTo(map);
 
       L.control.layers({'Basemap':baselayer},{'rio':mytile}).addTo(map);
-    })
+  
+              L.control.scale({
+                position: 'bottomright'
+            }).addTo(map);
+            
+            
+                        $(document).keyup(function(e) {
+                if (e.keyCode == 27) { // escape key maps to keycode `27`
+                $('#infoBox').hide();
+                                $('#customDataBox').hide();
+                    //close map popups
+                    map.closePopup();
+                }
+            });
+
+   
+    $('#infoButton').click(function() {
+                $('#infoBox').toggle();
+                                $('#customDataBox').hide();
+
+            });
+   
+               $('#infoBoxCloseBox').mousedown(function() {
+                $('#infoBox').hide();
+            });
+
+
+ $('#mapDatabaseButton').click(function() {
+                $('#customDataBox').toggle();
+                $('#infoBox').hide();
+
+
+              //  customTableDataTable.draw();
+            });
+            
+            
+                           $('#customDataBoxBox').mousedown(function() {
+                $('#customDataBox').hide();
+            });
+
+
+ $("#btn-slide-toggle").click(function() {
+                if (sideSlideToggle == true) {
+                    $("#side-panel").animate({
+                        left: "-300",
+                    }, 500, function() {
+                        // Animation complete.
+                        sideSlideToggle = false;
+                    });
+                } else {
+                    $("#side-panel").animate({
+                        left: "0",
+                    }, 500, function() {
+                        // Animation complete.
+                        sideSlideToggle = true;
+                    });
+                }
+            });
+
+  
+//end of ready function  
+    });
+    
+
+    
+//end of load 1    
+    });
+//end of loas 2            
+});
   </script>
-</head>
-<body>
-  <div id="map">
-    <div id="basemapslidercontainer">
-      <div id="basemapslider">
-    </div>
-  </div>
-  </div>
-</body>
+    
+    
+    </body>
 </html>
