@@ -421,8 +421,8 @@ a:hover {
     position: absolute;
     top: 1%;
     bottom: 1%;
-    left: 20%;
-    right: 20%;
+    left: 10%;
+    right: 10%;
     background: white;
     box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
     border-radius: 5px;
@@ -591,6 +591,7 @@ table.dataTable {
     clear: both;
     border-collapse: separate;
     border-spacing: 0;
+        font-size: 14px;
     /*
    * Header and footer styles
    */
