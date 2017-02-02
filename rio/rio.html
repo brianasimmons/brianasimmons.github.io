@@ -644,7 +644,7 @@ stTerrian.addTo(map);
                                         popupAnchor: [0, 0] // point from which the popup should open relative to the iconAnchor
                                     });
 
-                                } else if (feature.properties.featureTypes.includes("Perfume") == true) {
+                                } else if (feature.properties.type.includes("Perfume") == true) {
 
                                     rioMarker = L.icon({
                                         iconUrl: 'images/perfume.jpg',
